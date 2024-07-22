@@ -61,12 +61,13 @@ public class UserDao {
 	        try {
 	            Statement statement = connection.createStatement();
 	            ResultSet rs = statement.executeQuery("SELECT * FROM user");
+	            System.out.println("Fetching all users");
 	            while (rs.next()) {
 	                User user = new User();
 	                user.setId(rs.getInt("id"));
 	                user.setName(rs.getString("name"));
 	                user.setEmail(rs.getString("email"));
-	                user.setPassword(rs.getString("phone"));
+	                user.setPhone(rs.getString("phone"));
 	                user.setPassword(rs.getString("password"));
 	                users.add(user);
 	            }
@@ -86,7 +87,7 @@ public class UserDao {
 	                user.setId(rs.getInt("id"));
 	                user.setName(rs.getString("name"));
 	                user.setEmail(rs.getString("email"));
-	                user.setPassword(rs.getString("phone"));
+	                user.setPhone(rs.getString("phone"));
 	                user.setPassword(rs.getString("password"));
 	            }
 	        } catch (SQLException e) {

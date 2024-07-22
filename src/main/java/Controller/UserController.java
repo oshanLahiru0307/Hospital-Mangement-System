@@ -34,25 +34,25 @@ public class UserController extends HttpServlet {
                 case "delete":
                     int userId = Integer.parseInt(request.getParameter("userId"));
                     dao.deleteUser(userId);
-                    forward = "/user-list.jsp";
+                    forward = "/userList.jsp";
                     request.setAttribute("users", dao.getAllUsers());
                     break;
                 case "edit":
-                    forward = "/user-form.jsp";
+                    forward = "/registration.jsp";
                     int editUserId = Integer.parseInt(request.getParameter("userId"));
                     User user = dao.getUserById(editUserId);
                     request.setAttribute("user", user);
                     break;
                 case "listuser":
-                    forward = "/user-list.jsp";
+                    forward = "/userList.jsp.jsp";
                     request.setAttribute("users", dao.getAllUsers());
                     break;
                 default:
-                    forward = "/user-form.jsp";
+                    forward = "/userList.jsp";
                     break;
             }
         } else {
-            forward = "/user-form.jsp";
+            forward = "/userList.jsp";
         }
 
         RequestDispatcher view = request.getRequestDispatcher(forward);
@@ -77,7 +77,7 @@ public class UserController extends HttpServlet {
         }
 
         // Redirect to the user list after saving/updating
-        RequestDispatcher view = request.getRequestDispatcher("/login.jsp");
+        RequestDispatcher view = request.getRequestDispatcher("/userList.jsp");
         request.setAttribute("users", dao.getAllUsers());
         view.forward(request, response);
     }
