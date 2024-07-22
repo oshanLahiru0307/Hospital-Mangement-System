@@ -21,10 +21,11 @@ public class UserDao {
 
 	    public void addUser(User user) {
 	        try {
-	            PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO users(name, email, password) values (?, ?, ?)");
+	            PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO user(name, email, phone, password) values (?, ?, ?, ?)");
 	            preparedStatement.setString(1, user.getName());
 	            preparedStatement.setString(2, user.getEmail());
-	            preparedStatement.setString(3, user.getPassword());
+	            preparedStatement.setString(3, user.getPhone());
+	            preparedStatement.setString(4, user.getPassword());
 	            preparedStatement.executeUpdate();
 	        } catch (SQLException e) {
 	            e.printStackTrace();
@@ -33,7 +34,7 @@ public class UserDao {
 
 	    public void deleteUser(int userId) {
 	        try {
-	            PreparedStatement preparedStatement = connection.prepareStatement("DELETE FROM users WHERE id=?");
+	            PreparedStatement preparedStatement = connection.prepareStatement("DELETE FROM user WHERE id=?");
 	            preparedStatement.setInt(1, userId);
 	            preparedStatement.executeUpdate();
 	        } catch (SQLException e) {
@@ -43,11 +44,12 @@ public class UserDao {
 
 	    public void updateUser(User user) {
 	        try {
-	            PreparedStatement preparedStatement = connection.prepareStatement("UPDATE users SET name=?, email=?, password=? WHERE id=?");
+	            PreparedStatement preparedStatement = connection.prepareStatement("UPDATE user SET name=?, email=?, phone=?, password=? WHERE id=?");
 	            preparedStatement.setString(1, user.getName());
 	            preparedStatement.setString(2, user.getEmail());
-	            preparedStatement.setString(3, user.getPassword());
-	            preparedStatement.setInt(4, user.getId());
+	            preparedStatement.setString(3, user.getPhone());
+	            preparedStatement.setString(4, user.getPassword());
+	            preparedStatement.setInt(5, user.getId());
 	            preparedStatement.executeUpdate();
 	        } catch (SQLException e) {
 	            e.printStackTrace();
@@ -58,12 +60,13 @@ public class UserDao {
 	        List<User> users = new ArrayList<>();
 	        try {
 	            Statement statement = connection.createStatement();
-	            ResultSet rs = statement.executeQuery("SELECT * FROM users");
+	            ResultSet rs = statement.executeQuery("SELECT * FROM user");
 	            while (rs.next()) {
 	                User user = new User();
 	                user.setId(rs.getInt("id"));
 	                user.setName(rs.getString("name"));
 	                user.setEmail(rs.getString("email"));
+	                user.setPassword(rs.getString("phone"));
 	                user.setPassword(rs.getString("password"));
 	                users.add(user);
 	            }
@@ -76,13 +79,14 @@ public class UserDao {
 	    public User getUserById(int userId) {
 	        User user = new User();
 	        try {
-	            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM users WHERE id=?");
+	            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM user WHERE id=?");
 	            preparedStatement.setInt(1, userId);
 	            ResultSet rs = preparedStatement.executeQuery();
 	            if (rs.next()) {
 	                user.setId(rs.getInt("id"));
 	                user.setName(rs.getString("name"));
 	                user.setEmail(rs.getString("email"));
+	                user.setPassword(rs.getString("phone"));
 	                user.setPassword(rs.getString("password"));
 	            }
 	        } catch (SQLException e) {

@@ -35,7 +35,7 @@
 </head>
 <body>
 
-        <form>
+        <form action="userController" method="post">
 
             <div class="form-group">
               	<label for="exampleInputName">Name</label>

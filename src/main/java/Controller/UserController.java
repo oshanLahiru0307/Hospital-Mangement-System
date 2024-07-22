@@ -17,60 +17,68 @@ import Model.User;
  */
 @WebServlet("/UserController")
 public class UserController extends HttpServlet {
-	private static final long serialVersionUID = 1L;
-	private UserDao dao;   
+    private static final long serialVersionUID = 1L;
+    private UserDao dao;
 
     public UserController() {
         super();
         dao = new UserDao();
-        // TODO Auto-generated constructor stub
     }
 
-
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String action = request.getParameter("action");
         String forward = "";
-        
-        if (action.equalsIgnoreCase("delete")) {
-            int userId = Integer.parseInt(request.getParameter("userId"));
-            dao.deleteUser(userId);
-            forward = "/user-list.jsp";
-            request.setAttribute("users", dao.getAllUsers());
-        } else if (action.equalsIgnoreCase("edit")) {
-            forward = "/user-form.jsp";
-            int userId = Integer.parseInt(request.getParameter("userId"));
-            User user = dao.getUserById(userId);
-            request.setAttribute("user", user);
-        } else if (action.equalsIgnoreCase("listUser")) {
-            forward = "/user-list.jsp";
-            request.setAttribute("users", dao.getAllUsers());
+
+        if (action != null) {
+            switch (action.toLowerCase()) {
+                case "delete":
+                    int userId = Integer.parseInt(request.getParameter("userId"));
+                    dao.deleteUser(userId);
+                    forward = "/user-list.jsp";
+                    request.setAttribute("users", dao.getAllUsers());
+                    break;
+                case "edit":
+                    forward = "/user-form.jsp";
+                    int editUserId = Integer.parseInt(request.getParameter("userId"));
+                    User user = dao.getUserById(editUserId);
+                    request.setAttribute("user", user);
+                    break;
+                case "listuser":
+                    forward = "/user-list.jsp";
+                    request.setAttribute("users", dao.getAllUsers());
+                    break;
+                default:
+                    forward = "/user-form.jsp";
+                    break;
+            }
         } else {
             forward = "/user-form.jsp";
         }
 
         RequestDispatcher view = request.getRequestDispatcher(forward);
         view.forward(request, response);
-	}
+    }
 
-
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         User user = new User();
         user.setName(request.getParameter("name"));
         user.setEmail(request.getParameter("email"));
-        user.setPassword(request.getParameter("password"));
+        user.setPhone(request.getParameter("phone"));
+        user.setPassword(request.getParameter("password")); // Ensure this is correct
 
-        String userid = request.getParameter("userid");
-        if (userid == null || userid.isEmpty()) {
+        String userId = request.getParameter("userid");
+        if (userId == null || userId.isEmpty()) {
             dao.addUser(user);
+            System.out.println("User is added");
         } else {
-            user.setId(Integer.parseInt(userid));
+            user.setId(Integer.parseInt(userId));
             dao.updateUser(user);
+            System.out.println("User is updated");
         }
-        RequestDispatcher view = request.getRequestDispatcher("/user-list.jsp");
-        request.setAttribute("users", dao.getAllUsers());
-		view.forward(request, response);
-	}
 
+        // Redirect to the user list after saving/updating
+        RequestDispatcher view = request.getRequestDispatcher("/login.jsp");
+        request.setAttribute("users", dao.getAllUsers());
+        view.forward(request, response);
+    }
 }

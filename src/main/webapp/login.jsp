@@ -57,7 +57,7 @@
 
         	<div class="btn-center">
             	<button type="submit" class="btn btn-primary" name="login">Sign in</button>
-            	<p>don't have an account: <a href="registration">Sign Up</a></p>
+            	<p>don't have an account: <a href="registration.jsp">Sign Up</a></p>
         	</div>
         	
          </form>

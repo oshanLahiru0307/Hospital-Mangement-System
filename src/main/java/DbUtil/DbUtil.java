@@ -14,7 +14,7 @@ public class DBUtil {
         else {
             try {
                 Class.forName("com.mysql.jdbc.Driver");
-                connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/userdb", "root", "password");
+                connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/userdb", "root", "Lahiru@123");
             } catch (ClassNotFoundException | SQLException e) {
                 e.printStackTrace();
             }
