@@ -10,6 +10,7 @@ import java.util.List;
 
 import DbUtil.DBUtil;
 import Model.User;
+import at.favre.lib.crypto.bcrypt.BCrypt;
 
 public class UserDao {
 	
@@ -95,5 +96,28 @@ public class UserDao {
 	        }
 	        return user;
 	    }
+	    
+	    public User validateUser(String email, String password) {
+	        User user = null;
+	        try {
+	            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM user WHERE email=? AND password=?");
+	            preparedStatement.setString(1, email);
+	            preparedStatement.setString(2, password);
+	            ResultSet rs = preparedStatement.executeQuery();
+	            
+	            if (rs.next()) {
+	                user = new User();
+	                user.setId(rs.getInt("id"));
+	                user.setName(rs.getString("name"));
+	                user.setEmail(rs.getString("email"));
+	                user.setPhone(rs.getString("phone"));
+	                user.setPassword(rs.getString("password"));
+	            }
+	        } catch (SQLException e) {
+	            e.printStackTrace();
+	        }
+	        return user;
+	    }
+
 
 }

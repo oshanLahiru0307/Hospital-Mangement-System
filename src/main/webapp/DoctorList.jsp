@@ -14,7 +14,7 @@
 <body>
     <div class="container">
         <div class="topic">
-            <h1>User Details</h1>
+            <h1>Doctor Details</h1>
         </div>
         <div>
             <button type="button" class="btn btn-primary my-3">
@@ -23,23 +23,23 @@
             <table class="table table-hover">
                 <thead class="table-primary">
                     <tr>
-                        <th scope="col">Num</th>
                         <th scope="col">Name</th>
-                        <th scope="col">Email</th>
+                        <th scope="col">Type</th>
                         <th scope="col">Email</th>                        
-                        <th scope="col">Email</th>
-                        <th scope="col">Telephone</th>
+                        <th scope="col">Phone</th>
+                        <th scope="col">Password</th>
                         <th scope="col">Action</th>
                     </tr>
                 </thead>
                 <tbody>
                     <c:forEach var="doctor" items="${doctors}">
                         <tr>
-                            <th scope="row">${doctor.id}</th>
+                            <th scope="row">${doctor.name}</th>
                             <td>${doctor.name}</td>
+							<td>${doctor.type}</td>
                             <td>${doctor.phone}</td>
                             <td>${doctor.email}</td>
-							<td>${doctor.reg}</td>
+							<td>${doctor.regid}</td>
                             <td>${doctor.phone}</td>
                             <td>
                                 <button type="button" class="btn btn-primary">

@@ -35,7 +35,7 @@
 </head>
 <body>
 
-        <form action="userController" method="post">
+        <form action="doctorController" method="post">
 
             <div class="form-group">
               	<label for="exampleInputName">Name</label>
@@ -64,7 +64,7 @@
 
             <div class="form-group">
               	<label for="exampleInputEmail1">Registraion ID</label>
-              	<input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter your registration number" name="email" value="${user.email}" required>
+              	<input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter your registration number" name="regid" value="${user.email}" required>
               	<small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
             </div>                    
         

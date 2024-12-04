@@ -11,6 +11,7 @@ import java.util.List;
 
 import DbUtil.DBUtil;
 import Model.Doctor;
+import Model.User;
 
 public class doctorDao {
 	
@@ -100,5 +101,27 @@ public class doctorDao {
 		 
 		 return doctors;
 	}
+	
+	
+    public Doctor getDoctorById(int docId) {
+        Doctor doctor = new Doctor();
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM user WHERE id=?");
+            preparedStatement.setInt(1, docId);
+            ResultSet result = preparedStatement.executeQuery();
+            if (result.next()) {
+            	doctor.setDoc_Id(docId);
+				doctor.setDoc_Name(result.getString("name"));
+				doctor.setDoc_Type(result.getString("type"));
+				doctor.setDoc_Email(result.getString("email"));
+				doctor.setDoc_RegId(result.getString("regid"));
+				doctor.setDoc_Phone(result.getString("phone"));
+				doctor.setDoc_Password(result.getString("password"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return doctor;
+    }
 
 }

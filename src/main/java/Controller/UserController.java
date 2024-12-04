@@ -1,20 +1,17 @@
 package Controller;
 
 import java.io.IOException;
-
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import Doa.UserDao;
 import Model.User;
 
-/**
- * Servlet implementation class UserController
- */
 @WebServlet("/UserController")
 public class UserController extends HttpServlet {
     private static final long serialVersionUID = 1L;
@@ -44,7 +41,7 @@ public class UserController extends HttpServlet {
                     request.setAttribute("user", user);
                     break;
                 case "listuser":
-                    forward = "/userList.jsp.jsp";
+                    forward = "/userList.jsp";
                     request.setAttribute("users", dao.getAllUsers());
                     break;
                 default:
@@ -60,25 +57,48 @@ public class UserController extends HttpServlet {
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        User user = new User();
-        user.setName(request.getParameter("name"));
-        user.setEmail(request.getParameter("email"));
-        user.setPhone(request.getParameter("phone"));
-        user.setPassword(request.getParameter("password")); // Ensure this is correct
+        String action = request.getParameter("action");
 
-        String userId = request.getParameter("userid");
-        if (userId == null || userId.isEmpty()) {
-            dao.addUser(user);
-            System.out.println("User is added");
+        if ("login".equals(action)) {
+            processLogin(request, response);
         } else {
-            user.setId(Integer.parseInt(userId));
-            dao.updateUser(user);
-            System.out.println("User is updated");
-        }
+            User user = new User();
+            user.setName(request.getParameter("name"));
+            user.setEmail(request.getParameter("email"));
+            user.setPhone(request.getParameter("phone"));
+            user.setPassword(request.getParameter("password")); // Ensure this is correct
 
-        // Redirect to the user list after saving/updating
-        RequestDispatcher view = request.getRequestDispatcher("/userList.jsp");
-        request.setAttribute("users", dao.getAllUsers());
-        view.forward(request, response);
+            String userId = request.getParameter("userid");
+            if (userId == null || userId.isEmpty()) {
+                dao.addUser(user);
+                System.out.println("User is added");
+            } else {
+                user.setId(Integer.parseInt(userId));
+                dao.updateUser(user);
+                System.out.println("User is updated");
+            }
+
+            // Redirect to the user list after saving/updating
+            RequestDispatcher view = request.getRequestDispatcher("/userList.jsp");
+            request.setAttribute("users", dao.getAllUsers());
+            view.forward(request, response);
+        }
+    }
+
+    private void processLogin(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String email = request.getParameter("email");
+        String password = request.getParameter("password");
+
+        User user = dao.validateUser(email, password);
+
+        if (user != null) {
+            HttpSession session = request.getSession();
+            session.setAttribute("currentUser", user);
+            response.sendRedirect("userList.jsp");
+        } else {
+            request.setAttribute("errorMessage", "Invalid email or password");
+            RequestDispatcher view = request.getRequestDispatcher("login.jsp");
+            view.forward(request, response);
+        }
     }
 }
